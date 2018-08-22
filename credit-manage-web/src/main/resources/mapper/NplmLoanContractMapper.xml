@@ -3,25 +3,48 @@
 
 
 <mapper namespace="com.mingzhe.credit.manage.mapper.NplmLoanContractMapper">
-    <select id="getNplmLoanContractMapList" resultMap="contractMap" >
 
-        SELECT nlc.`ID` , nlc.`LOAN_CONTRACT_NUM` , nca.`id` nca_id ,nca.`loan_contract_id`,
-        nbi.`id` nbi_id ,nbi.`CLIENT_NAME`
-        FROM nplm_loan_contract nlc INNER JOIN nplm_contract_attribute nca
-        ON  nlc.`ID`= nca.`loan_contract_id`
-        INNER JOIN nplm_borrower_info nbi
-        ON nlc.`borrower_id` = nbi.`id`
-    </select>
     <resultMap id="contractMap" type="com.mingzhe.credit.bean.NplmLoanContract" autoMapping="true">
-        <result property="id" column="id" ></result>
-        <collection property="nplmBorrowerInfoList" ofType="com.mingzhe.credit.bean.NplmBorrowerInfo" autoMapping="true">
-            <result property="id" column="nca_id" ></result>
+        <id property="id" column="id"></id>
+        <!-- <result property="id" column="id" ></result>-->
+        <collection property="nplmContractAttribute" ofType="com.mingzhe.credit.bean.NplmContractAttribute" autoMapping="true">
+            <id property="id" column="b_id"></id>
+            <!--<result property="id" column="nca_id" ></result>-->
         </collection>
-        <collection property="nplmContractAttributeList" ofType="com.mingzhe.credit.bean.NplmContractAttribute" autoMapping="true">
-            <result property="id" column="nbi_id" ></result>
+        <collection property="nplmBorrowerInfo" ofType="com.mingzhe.credit.bean.NplmBorrowerInfo" autoMapping="true">
+            <id property="id" column="c"></id>
+            <!--<result property="id" column="nbi_id" ></result>-->
         </collection>
     </resultMap>
 
+
+    <select id="getNplmLoanContractMapList" resultMap="contractMap" >
+
+
+        SELECT
+            a.`ID` , a.`LOAN_CONTRACT_NUM` , a.`LOAN_INSTALMENTS`,a.`START_DATE`,a.`END_DATE`,
+            a.`LOAN_AMOUNT`,a.`REPAY_ACCOUNT_BANK_NAME`,a.`REPAY_ACT_BRANCH_NO`,a.`PRE_FEE`,a.`LOAN_TYPE`,
+            a.`PUT_AMOUNT`,
+            b.`id` b_id ,b.`loan_contract_id`,b.`def1`,b.`def1`,b.`def2`,b.`def3`,b.`def4`,
+            b.`sign_type`,b.`sign_date`,b.`is_recycle_load`,b.`recycle_loan_cnt`,b.`settle_date`,
+
+            c.`id` c_id ,c.`CLIENT_NAME`,c.`IDENTITY_TYPE`,c.`IDENTITY_NUM`
+
+            FROM nplm_loan_contract a INNER JOIN nplm_contract_attribute b
+            ON  a.`ID`= b.`loan_contract_id`
+            INNER JOIN nplm_borrower_info c
+            ON a.`borrower_id` = c.`id`
+            LIMIT #{pageIndex},#{pageSize}
+
+    </select>
+    <select id="getContractMapCount" resultType="int">
+        SELECT
+        COUNT(a.`ID`)
+        FROM nplm_loan_contract a INNER JOIN nplm_contract_attribute b
+        ON  a.`ID`= b.`loan_contract_id`
+        INNER JOIN nplm_borrower_info c
+        ON a.`borrower_id` = c.`id`
+    </select>
 
 
 

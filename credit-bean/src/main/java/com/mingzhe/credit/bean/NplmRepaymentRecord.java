@@ -1,11 +1,12 @@
 package com.mingzhe.credit.bean;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 还款_还款记录表
  */
-public class NplmRepaymentRecord {
+public class NplmRepaymentRecord implements Serializable {
 
     private Integer id;
 

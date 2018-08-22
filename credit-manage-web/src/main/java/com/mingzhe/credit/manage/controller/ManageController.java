@@ -4,13 +4,17 @@ package com.mingzhe.credit.manage.controller;
 import com.alibaba.fastjson.JSON;
 import com.mingzhe.credit.bean.NplmLoanContract;
 import com.mingzhe.credit.service.CreditService;
+import org.codehaus.groovy.util.ListHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ManageController {
@@ -23,24 +27,48 @@ public class ManageController {
     //后台管理
     @RequestMapping("index")
     public String smp(){
-        List<NplmLoanContract> loanContractList = creditService.getNplmLoanContractList();
-        String jsonString = JSON.toJSONString(loanContractList);
-//        return jsonString ;
+
         return "index";
     }
 
     //放款列表
     @RequestMapping("loanList")
+    @ResponseBody
     public String loanList(Model model){
-        List<NplmLoanContract> loanContractList = creditService.getNplmLoanContractList();
-        String jsonString = JSON.toJSONString(loanContractList);
-        model.addAttribute("loanContractList",loanContractList) ;
-        return "loanList" ;
+
+        return null ;
     }
     //合同列表
     @RequestMapping("contractList")
     public String contractList(){
+
         return "contractList" ;
+    }
+    //异步合同信息查询
+    @ResponseBody
+    @RequestMapping("queryLoanContractList")
+    public Map<String,Object> queryLoanContractList(@RequestParam Map<String,Object> param){
+        //当前页码
+        String page = (String) param.get("page");
+        //每页条数
+        String rows = (String) param.get("rows");
+
+        int pageNum = Integer.parseInt(page);
+        int pageSize = Integer.parseInt(rows);
+        //每页起始索引
+        int pageIndex = (pageNum-1)*pageSize ;
+        //查询合同分页信息
+        List<NplmLoanContract> nplmLoanContractList = creditService.getNplmLoanContractList(pageIndex, pageSize);
+        //查询合同信息总条数
+        int contractCount = creditService.getContractCount();
+
+        Map<String,Object> result = new HashMap<>() ;
+
+        result.put("total",contractCount) ;
+        result.put("rows",nplmLoanContractList) ;
+
+        return result ;
+
     }
     //查看还款情况页面
     @RequestMapping("viewRepaymentStatusPage")

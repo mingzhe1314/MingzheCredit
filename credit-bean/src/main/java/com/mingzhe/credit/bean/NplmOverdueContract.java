@@ -1,11 +1,12 @@
 package com.mingzhe.credit.bean;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 还款_逾期合同表
  */
-public class NplmOverdueContract {
+public class NplmOverdueContract implements Serializable {
     private String id;
 
     private String loanContractNum;

@@ -14,8 +14,14 @@ public class CreditServiceImpl implements CreditService {
     private NplmLoanContractMapper nplmLoanContractMapper ;
 
     @Override
-    public List<NplmLoanContract> getNplmLoanContractList() {
-        List<NplmLoanContract> loanContractList = nplmLoanContractMapper.getNplmLoanContractMapList() ;
+    public List<NplmLoanContract> getNplmLoanContractList(int pageIndex, int pageSize) {
+        List<NplmLoanContract> loanContractList = nplmLoanContractMapper.getNplmLoanContractMapList(pageIndex, pageSize) ;
         return loanContractList;
+    }
+
+    @Override
+    public int getContractCount() {
+        int count = nplmLoanContractMapper.getContractMapCount();
+        return count;
     }
 }

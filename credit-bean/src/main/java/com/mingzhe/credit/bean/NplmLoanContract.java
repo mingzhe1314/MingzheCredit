@@ -1,17 +1,15 @@
 package com.mingzhe.credit.bean;
 
 import javax.annotation.Generated;
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 /**
  * 合同_贷款合同表
  */
-public class NplmLoanContract {
+public class NplmLoanContract implements Serializable {
 
     @Id
     @Column
@@ -98,9 +96,9 @@ public class NplmLoanContract {
     private String cycleCreditId;
     @Column
     private String updateType;
-
+    @Transient
     private NplmBorrowerInfo nplmBorrowerInfo ;
-
+    @Transient
     private NplmContractAttribute nplmContractAttribute ;
 
     public NplmBorrowerInfo getNplmBorrowerInfo() {

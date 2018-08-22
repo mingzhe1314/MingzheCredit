@@ -4,12 +4,13 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 合同_合同属性表
  */
-public class NplmContractAttribute {
+public class NplmContractAttribute implements Serializable {
 
     @Id
     @Column
