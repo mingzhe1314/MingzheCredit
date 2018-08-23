@@ -8,6 +8,7 @@ import org.codehaus.groovy.util.ListHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -69,6 +70,32 @@ public class ManageController {
 
         return result ;
 
+    }
+
+
+    @ResponseBody
+    @RequestMapping("queryContractList")
+    public Map<String,Object> queryContractList(@RequestParam Map<String,Object> param,NplmLoanContract nplmLoanContract){
+
+        //当前页码
+        String page = (String) param.get("page");
+        //每页条数
+        String rows = (String) param.get("rows");
+
+        int pageNum = Integer.parseInt(page);
+        int pageSize = Integer.parseInt(rows);
+        //每页起始索引
+        int pageIndex = (pageNum-1)*pageSize ;
+        //条件查询合同信息
+        List<NplmLoanContract> nplmLoanContractList = creditService.queryContractList(nplmLoanContract, pageIndex, pageSize);
+        //条件查询合同信息总条数
+        int contractCount = creditService.queryContractCount(nplmLoanContract);
+        Map<String,Object> result = new HashMap<>() ;
+
+        result.put("total",contractCount) ;
+        result.put("rows",nplmLoanContractList) ;
+
+        return result ;
     }
     //查看还款情况页面
     @RequestMapping("viewRepaymentStatusPage")

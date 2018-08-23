@@ -243,36 +243,24 @@
         return s.replace(/^\./, "0.");
     }
 
+	function searchInfo(){
+        $("#tt").datagrid('load',{total:0,rows:[]});
 
-    /*function searchInfo(){
-
-        var params = $("#searchForm").serialize();//先取得 from 的查询参数
-
-        alert(params);
-
-        $.post("/searchInfo" , $("#searchForm").serialize(),function (data) {
-            alert(data);
-            $("#tt").datagrid("load",data);
-        })
+		var nplmLoanContract = $("#searchForm").serialize();
 
 
-    };*/
-    function searchInfo(){
-        $('#tt').datagrid('load',{total:0,rows:[]});
-        /*var params = $("#searchForm").serialize();
-        var paramArr = params.split('&');
-        var res = {};
-        for(var i = 0;i<paramArr.length;i++){
-            var str = paramArr[i].split('=');
-            res[str[0]]=str[1];
-        }*/
-        $('#tt').datagrid({
-            url:'/searchInfo?'+$("#searchForm").serialize(),
-            // queryParams:res,
-            pageSize:2,
-            pageList:[2,5,10,20,30]
-        });
-    }
+        $("#tt").datagrid({
+
+			url:'queryContractList?' + nplmLoanContract ,
+			pageSize:2,
+			pageList:[1,2,3]
+		});
+
+
+
+	}
+
+
 
 </script>
 
@@ -294,7 +282,7 @@
 				客户姓名：
 			</td>
 			<td width="20%">
-				<input id="clientName" name="borrowerInfo.clientName" style="width:188px;" value="">
+				<input id="clientName" name="nplmBorrowerInfo.clientName" style="width:188px;" value="">
 				<input type="hidden" id="pPage" name="pageSize" value="">
 				<input type="hidden" id="pSize" name="pageSize" value="">
 				<input type="hidden" id="sysId" name="sysId" value="11">

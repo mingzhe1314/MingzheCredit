@@ -12,15 +12,13 @@
             <!--<result property="id" column="nca_id" ></result>-->
         </collection>
         <collection property="nplmBorrowerInfo" ofType="com.mingzhe.credit.bean.NplmBorrowerInfo" autoMapping="true">
-            <id property="id" column="c"></id>
+            <id property="id" column="c_id"></id>
             <!--<result property="id" column="nbi_id" ></result>-->
         </collection>
     </resultMap>
 
-
+    <!--合同信息查询-->
     <select id="getNplmLoanContractMapList" resultMap="contractMap" >
-
-
         SELECT
             a.`ID` , a.`LOAN_CONTRACT_NUM` , a.`LOAN_INSTALMENTS`,a.`START_DATE`,a.`END_DATE`,
             a.`LOAN_AMOUNT`,a.`REPAY_ACCOUNT_BANK_NAME`,a.`REPAY_ACT_BRANCH_NO`,a.`PRE_FEE`,a.`LOAN_TYPE`,
@@ -37,6 +35,7 @@
             LIMIT #{pageIndex},#{pageSize}
 
     </select>
+    <!--合同信息总条数-->
     <select id="getContractMapCount" resultType="int">
         SELECT
         COUNT(a.`ID`)
@@ -45,8 +44,49 @@
         INNER JOIN nplm_borrower_info c
         ON a.`borrower_id` = c.`id`
     </select>
+    <!--条件合同信息-->
+    <select id="queryContractMapList" resultMap="contractMap">
+        SELECT
+            a.`ID` , a.`LOAN_CONTRACT_NUM` , a.`LOAN_INSTALMENTS`,a.`START_DATE`,a.`END_DATE`,
+            a.`LOAN_AMOUNT`,a.`REPAY_ACCOUNT_BANK_NAME`,a.`REPAY_ACT_BRANCH_NO`,a.`PRE_FEE`,a.`LOAN_TYPE`,
+            a.`PUT_AMOUNT`,
+            b.`id` b_id ,b.`loan_contract_id`,b.`def1`,b.`def1`,b.`def2`,b.`def3`,b.`def4`,
+            b.`sign_type`,b.`sign_date`,b.`is_recycle_load`,b.`recycle_loan_cnt`,b.`settle_date`,
 
+            c.`id` c_id ,c.`CLIENT_NAME`,c.`IDENTITY_TYPE`,c.`IDENTITY_NUM`
 
+            FROM nplm_loan_contract a INNER JOIN nplm_contract_attribute b
+            ON  a.`ID`= b.`loan_contract_id`
+            INNER JOIN nplm_borrower_info c
+            ON a.`borrower_id` = c.`id`
 
+            <trim prefix="where"  prefixOverrides="and">
+                <if test="nplmLoanContract.loanContractNum!=null &amp;&amp; nplmLoanContract.loanContractNum!=&quot;&quot;">
+                    and a.`LOAN_CONTRACT_NUM` = #{nplmLoanContract.loanContractNum}
+                </if>
+                <if test="nplmLoanContract.nplmBorrowerInfo.clientName!=null &amp;&amp; nplmLoanContract.nplmBorrowerInfo.clientName!=&quot;&quot;">
+                    and c.`CLIENT_NAME` = #{nplmLoanContract.nplmBorrowerInfo.clientName}
+                </if>
+            </trim>
+            LIMIT #{pageIndex},#{pageSize}
 
+    </select>
+    <!--条件合同信息总条数-->
+    <select id="queryContractMapCount" resultType="int">
+        SELECT
+        COUNT(a.`ID`)
+        FROM nplm_loan_contract a INNER JOIN nplm_contract_attribute b
+        ON  a.`ID`= b.`loan_contract_id`
+        INNER JOIN nplm_borrower_info c
+        ON a.`borrower_id` = c.`id`
+        <trim prefix="where"  prefixOverrides="and">
+            <if test="loanContractNum!=null &amp;&amp; loanContractNum!=&quot;&quot;">
+                and a.`LOAN_CONTRACT_NUM` = #{loanContractNum}
+            </if>
+            <if test="nplmBorrowerInfo.clientName!=null &amp;&amp; nplmBorrowerInfo.clientName!=&quot;&quot;">
+                and c.`CLIENT_NAME` = #{nplmBorrowerInfo.clientName}
+            </if>
+        </trim>
+
+    </select>
 </mapper>
