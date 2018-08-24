@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -112,7 +113,6 @@ public class ManageController {
     //前期费用列表
     @RequestMapping("preCostList")
     public String preCostList(){
-
         return "preCostList" ;
     }
     //变更费用列表
